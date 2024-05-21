@@ -7,11 +7,15 @@
 
 export interface Input {
   /**
-   * Name of the track event (e.g. "retrieve-info")
+   * Name of the track event (e.g. "Clicked on Purchase Button")
    */
   name: string;
   /**
-   * JSON string for properties of the track event
+   * The Botpress conversation ID to assign to the track event
+   */
+  traceId: string;
+  /**
+   * Additional properties of the track event (MUST be a JSON string)
    */
   properties?: string;
 }

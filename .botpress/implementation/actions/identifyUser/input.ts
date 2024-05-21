@@ -7,19 +7,21 @@
 
 export interface Input {
   /**
-   * The Botpress conversation ID to assign to the trace
+   * The user ID to identify
    */
-  conversationId: string;
+  userId: string;
   /**
-   * Role of sender ("user" | "assistant")
+   * Name of the user
    */
-  role: string;
+  name?: string;
   /**
-   * Content of the message (e.g. "Hello, how are you?")
+   * Email of the user
    */
-  content: string;
+  email?: string;
   /**
-   * Metadata of the message
+   * Additional user properties (MUST be a JSON string)
    */
-  metadata?: string;
+  properties?: {
+    [k: string]: any;
+  };
 }

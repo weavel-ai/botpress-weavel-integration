@@ -20,7 +20,7 @@ export * as states from "./states/index"
 
 type TIntegration = {
   name: "weavel"
-  version: "0.3.0"
+  version: "2.0.1"
   configuration: configuration.Configuration
   actions: actions.Actions
   channels: channels.Channels

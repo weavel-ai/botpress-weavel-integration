@@ -1,5 +1,4 @@
-import { captureTraceData } from './capture-trace-data'
-import { captureTrackEvent } from './capture-track-event'
-import { openTrace } from './open-trace'
+import { captureTrackEvent } from "./capture-track-event";
+import { identifyUser } from "./identify-user";
 
-export default { captureTrackEvent, captureTraceData, openTrace }
+export default { captureTrackEvent, identifyUser };
