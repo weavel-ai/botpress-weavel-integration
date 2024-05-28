@@ -1,11 +1,11 @@
 import { getClient } from "src/client";
 import { CaptureTrackEventRequest } from "src/client/types";
-import { captureTrackEventInputSchema } from "src/misc/schemas";
+import { logTrackEventInputSchema } from "src/misc/schemas";
 import type { Implementation } from "../misc/types";
 
-export const captureTrackEvent: Implementation["actions"]["captureTrackEvent"] =
+export const logTrackEvent: Implementation["actions"]["logTrackEvent"] =
   async ({ ctx, input, logger }) => {
-    const validatedInput = captureTrackEventInputSchema.parse(input);
+    const validatedInput = logTrackEventInputSchema.parse(input);
     const weavelClient = getClient(ctx.configuration.apiKey);
     let properties = {};
 
@@ -20,7 +20,7 @@ export const captureTrackEvent: Implementation["actions"]["captureTrackEvent"] =
     }
 
     const data: CaptureTrackEventRequest = {
-      user_id: ctx.botUserId,
+      user_id: validatedInput.userId,
       trace_id: validatedInput.traceId,
       name: validatedInput.name,
       properties: properties,

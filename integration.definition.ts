@@ -4,7 +4,7 @@ import { actions, configuration, channels } from "./src/definitions";
 
 export default new IntegrationDefinition({
   name: INTEGRATION_NAME,
-  version: "2.0.1",
+  version: "3.0.0",
   title: "Weavel",
   icon: "icon.svg",
   readme: "hub.md",

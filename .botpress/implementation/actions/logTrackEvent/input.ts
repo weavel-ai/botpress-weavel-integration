@@ -7,13 +7,17 @@
 
 export interface Input {
   /**
+   * The user ID to assign the track event to (use {{event.userId}})
+   */
+  userId?: string;
+  /**
    * Name of the track event (e.g. "Clicked on Purchase Button")
    */
   name: string;
   /**
-   * The Botpress conversation ID to assign to the track event
+   * The Botpress conversation ID to assign to the track event (use {{event.conversationId}})
    */
-  traceId: string;
+  traceId?: string;
   /**
    * Additional properties of the track event (MUST be a JSON string)
    */

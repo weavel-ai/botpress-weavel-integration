@@ -1,8 +1,9 @@
 import z from "zod";
 
-export const captureTrackEventInputSchema = z.object({
-  name: z.string(),
+export const logTrackEventInputSchema = z.object({
+  userId: z.string(),
   traceId: z.string(),
+  name: z.string(),
   properties: z.string().optional(),
 });
 
@@ -11,6 +12,11 @@ export const identifyUserInputSchema = z.object({
   name: z.string().optional(),
   email: z.string().email().optional(),
   properties: z.string().optional(),
+});
+
+export const logMessageMetadataSchema = z.object({
+  messageId: z.string(),
+  metadata: z.string(),
 });
 
 // export const openTraceInputSchema = z.object({

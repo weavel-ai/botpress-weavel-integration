@@ -1,11 +1,41 @@
 import { IntegrationDefinitionProps } from "@botpress/sdk";
 import z from "zod";
 
-const captureTrackEvent = {
+const identifyUser = {
+  title: "Identify user",
+  description: "Identify user properties to Weavel",
+  input: {
+    schema: z.object({
+      userId: z
+        .string()
+        .default("{{event.userId}}")
+        .describe("The user ID to identify (use {{event.userId}})"),
+      name: z.string().optional().describe("Name of the user"),
+      email: z.string().email().optional().describe("Email of the user"),
+      properties: z
+        .record(z.string(), z.any())
+        .optional()
+        .describe("Additional user properties (MUST be a JSON string)"),
+    }),
+  },
+  output: {
+    schema: z.object({
+      success: z.boolean(),
+    }),
+  },
+};
+
+const logTrackEvent = {
   title: "Log track event",
   description: "Log an track event to Weavel",
   input: {
     schema: z.object({
+      userId: z
+        .string()
+        .default("{{event.userId}}")
+        .describe(
+          "The user ID to assign the track event to (use {{event.userId}})"
+        ),
       name: z
         .string()
         .describe(
@@ -13,7 +43,10 @@ const captureTrackEvent = {
         ),
       traceId: z
         .string()
-        .describe("The Botpress conversation ID to assign to the track event"),
+        .default("{{event.conversationId}}")
+        .describe(
+          "The Botpress conversation ID to assign to the track event (use {{event.conversationId}})"
+        ),
       properties: z
         .string()
         .optional()
@@ -30,18 +63,21 @@ const captureTrackEvent = {
   },
 };
 
-const identifyUser = {
-  title: "Identify user",
-  description: "Identify user properties to Weavel",
+const logMessageMetadata = {
+  title: "Log Message Metadata",
+  description:
+    "This card will attach metadata to the message identified with the messageId. Use a code execution block to create a metadata formatted as a JSON string, and pass the metadata variable to this card.",
   input: {
     schema: z.object({
-      userId: z.string().describe("The user ID to identify"),
-      name: z.string().optional().describe("Name of the user"),
-      email: z.string().email().optional().describe("Email of the user"),
-      properties: z
-        .record(z.string(), z.any())
-        .optional()
-        .describe("Additional user properties (MUST be a JSON string)"),
+      messageId: z
+        .string()
+        .default("{{workflow.messageId}}")
+        .describe(
+          "The message ID to assign the metadata to (use {{workflow.messageId}})"
+        ),
+      metadata: z
+        .string()
+        .describe("Metadata of the trace data (MUST be a JSON string)"),
     }),
   },
   output: {
@@ -90,6 +126,7 @@ const identifyUser = {
 // };
 
 export const actions = {
-  captureTrackEvent,
   identifyUser,
+  logTrackEvent,
+  logMessageMetadata,
 } satisfies IntegrationDefinitionProps["actions"];

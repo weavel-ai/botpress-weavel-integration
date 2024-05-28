@@ -6,7 +6,7 @@ export * as input from "./input";
 import * as output from "./output";
 export * as output from "./output";
 
-export type ActionCaptureActionEvent = {
+export type ActionLogTrackEvent = {
   input: input.Input;
   output: output.Output;
 }

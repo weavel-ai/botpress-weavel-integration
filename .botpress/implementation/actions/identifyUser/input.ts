@@ -7,9 +7,9 @@
 
 export interface Input {
   /**
-   * The user ID to identify
+   * The user ID to identify (use {{event.userId}})
    */
-  userId: string;
+  userId?: string;
   /**
    * Name of the user
    */

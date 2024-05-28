@@ -9,9 +9,9 @@ To establish this integration, the following is required:
 - Authorized access to an existing Weavel project. If you don't have an existing account, you can sign up for free [here](https://weavel.ai).
 - A valid Weavel project API key.
 
-After the setup, you should follow the instructions on _Prerequisites_ to ensure all of your chatbot's conversation data is properly captured by Weavel. You can also make use of the **Capture track event** action in your chatbot for advanced product analytics.
+After the setup, you should follow the instructions below to ensure all of your chatbot's conversation data is properly captured by Weavel.
 
-You can also follow an interactive guide to set up the integration [here](https://weavel.ai/docs/platforms/botpress#log-data-from-botpress-studio).
+You can also follow an interactive guide to set up the integration [here](https://weavel.ai/docs/platform-integrations/botpress#log-data-from-botpress-studio).
 
 ## Setup realtime message logging
 
@@ -33,15 +33,19 @@ Create a new hook under the "After Incoming Message" section, and add the follow
 ```typescript
 try {
   const userMessage = event.preview;
+  const incomingMessageId = event.id;
+  workflow.incomingMessageId = incomingMessageId;
   await axios.post(
     "https://api.weavel.ai/capture/trace_data",
     {
       trace_id: event.conversationId,
+      trace_data_id: incomingMessageId,
       user_id: event.userId,
       role: "user",
       content: userMessage,
       metadata: {
-        // Add any additional metadata you want to capture here
+        // Add any additional metadata you want to capture (for all messages) here.
+        // To capture metadata for specific messages, use the "Log message metadata" card in the studio.
       },
     },
     {
@@ -67,17 +71,19 @@ try {
       outgoingEvent.payload
     )}`;
   }
-
+  const outgoingMessageId = outgoingEvent.id;
+  workflow.outgoingMessageId = outgoingMessageId;
   const data = {
     trace_id: event.conversationId,
+    trace_data_id: outgoingMessageId,
     user_id: event.userId,
     role: "assistant",
     content: assistantMessage,
     metadata: {
-      // Add any additional metadata you want to capture here
+      // Add any additional metadata you want to capture (for all messages) here.
+      // To capture metadata for specific messages, use the "Log message metadata" card in the studio.
     },
   };
-
   await axios.post("https://api.weavel.ai/capture/trace_data", data, {
     headers: {
       Authorization: `Bearer ${event.state.configVariables?.["weavelApiKey"]}`,
@@ -97,6 +103,35 @@ You can use this function to identify users in Weavel. This will populate the us
 ### Log track event
 
 You can use this function to log track events to Weavel. This is useful for tracking user interactions and events in your bot, such as button clicks, successful form submissions, and other custom events.
+
+### Log message metadata
+
+Use this function to log metadata for specific messages. This is useful for capturing additional context for specific messages, such as user feedback score, details for AI generated messages (knowledge base, AI model, etc.), etc.
+
+#### Some additional setup is required for this action card to work:
+
+1. Add four workflow variables to your bot: `incomingMessageId`, `outgoingMessageId`, `messageId`, and `metadata`. If you have copied the hooks from the previous section, you will see that these variables are used to store the message ids for incoming and outgoing messages.
+
+2. Just after the card that sends/receives the message where you want to log metadata to, add an **Execute code** action card to set the `messageId` variable. Copy one of the following code snippets into the card:
+
+```typescript
+// If you want to log the user's message
+workflow.messageId = workflow.incomingMessageId;
+```
+
+```typescript
+// If you want to log the assistant's message
+workflow.messageId = workflow.outgoingMessageId;
+```
+
+3. Before the **Log Message Metadata** action card, add an **Execute code** action card to declare the metadata as a JSON string. Refer to the example below:
+
+```typescript
+workflow.metadata = JSON.stringify({
+  feedbackScore: 5,
+  model: "gpt-3.5-turbo",
+});
+```
 
 ## Learn more
 

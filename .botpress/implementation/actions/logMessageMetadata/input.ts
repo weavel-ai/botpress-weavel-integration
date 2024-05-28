@@ -7,11 +7,11 @@
 
 export interface Input {
   /**
-   * The Botpress conversation ID to assign to the trace
+   * The message ID to assign the metadata to (use {{workflow.messageId}})
    */
-  conversationId: string;
+  messageId?: string;
   /**
-   * JSON string for metadata of the trace
+   * Metadata of the trace data (MUST be a JSON string)
    */
-  metadata?: string;
+  metadata: string;
 }
